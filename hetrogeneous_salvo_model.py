@@ -1,5 +1,3 @@
-# Homogeneous Salvo Model
-
 class Force:
 
 	"""A class to represent a either the blue or red force in a homogeneous salvo model
@@ -79,60 +77,44 @@ class Force:
 	def __repr__(self):
 		return f"{self.name} -- {self.num_units} "
 
-		
-class Engagement:
-	def __init__(self, force_a, force_b):
-		self.a = force_a
-		self.b = force_b
-		self.iter = 0
-	
-	def salvo_engagement(self):
-		'''simultaneous enagagement both A and B fire at the same time'''
-		# B fires at A, damage to A is calculated
-		delta_a = ((self.b.aimed_offense*self.b.num_units) - (self.a.defense_capability * self.a.num_units)) \
-				/ self.a.defense_staying
-		# A fires at B, damage to B is calculated
-		delta_b = ((self.a.aimed_offense*self.a.num_units) - (self.b.defense_capability * self.b.num_units)) \
-				/ self.b.defense_staying
-		self.a.num_units -= max(delta_a,0)
-		self.b.num_units -= max(delta_b,0)
-		self.iter += 1
-	
-	def wining_force(self):
-		if self.a > self.b:
-			return self.a.name
-		if self.a < self.b:
-			return self.b.name
-		else:
-			return "Stalemate"
-	
-	def iter_engagement(self):
-		while self.a > 0 and self.b > 0:
-			self.salvo_engagement()
-			print(self.a.name, self.a.num_units)
-			print(self.b.name, self.b.num_units)
-		nl = "\n"
-		return print(
-		f"{nl} Battle complete after {self.iter} iterations. The winner is {self.wining_force()}{nl}. \
-		Remaing combat power:{nl} \
-		{self.a.name}: {self.a.num_units} {nl} \
-		{self.b.name}: {self.b.num_units}" )
-	
+
+class Group:
+    def __init__(self):
+        self.container = []
+
+    def add_unit(self, *args):
+        units = [i for i in args]
+        return self.container.extend(units)
+    
+    
+
 if __name__ == "__main__":
-	a = Force(name="side A",num_units= 6,
-			aimed_offense = 1,
-			num_missiles = 10,
-			defense_capability =1,
-			defense_staying =1)
+    a = Force(name="MRC1",num_units= 6,
+                aimed_offense = 1,
+                num_missiles = 10,
+                defense_capability =1,
+                defense_staying =1)
 
-	b = Force(name="side B",num_units= 3,
-			aimed_offense = 3,
-			num_missiles = 10,
-			defense_capability =2,
-			defense_staying =2)
+    b = Force(name="MRC2",num_units= 3,
+                aimed_offense = 3,
+                num_missiles = 10,
+                defense_capability =2,
+                defense_staying =2)
+    c = Force(name="EN1",num_units= 6,
+                aimed_offense = 1,
+                num_missiles = 10,
+                defense_capability =1,
+                defense_staying =1)
 
-	print(a)
+    d = Force(name="EN2",num_units= 3,
+                aimed_offense = 3,
+                num_missiles = 10,
+                defense_capability =2,
+                defense_staying =2)
 
-	battle_1 = Engagement(a,b)
-	print(a.num_units, b.num_units)
-	battle_1.iter_engagement()
+    groupA = Group()
+    groupB = Group()
+    groupA.add_unit(a,b)
+    groupB.add_unit(c,d)
+    print(groupA.container)
+    print(groupB.container)
