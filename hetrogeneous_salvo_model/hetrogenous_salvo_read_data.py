@@ -1,20 +1,26 @@
 import pandas as pd
 
-path = "hetrogeneous_salvo_data_input_tool.xlsx"
-
-group = pd.read_excel(path, sheet_name= 0, index_col=[0], engine='openpyxl')
-group = [x for _, x in group.groupby('Formations')]
-
-for x in range(len(group)):
-    temp = group[x]
-    n = group[x].shape[1] # num enemy targets
-    unit_dict = {}
-    num_const = 4
-    num_array = 12
-    for i in range(num_const):
-        unit_dict[temp.iloc[i,0]] = temp.iloc[i,1]
+def read_input_file(path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool.xlsx",
+                    side = 0,
+                    num_const = 4,
+                    num_array = 12):    
+    group = pd.read_excel(path, sheet_name= side, index_col=[0], engine='openpyxl')
+    group = [x for _, x in group.groupby('Formations')]
+    unit_container = []
+    
+    for temp in group:
+        n = temp.shape[1] # num enemy targets
+        unit_dict = {}
         
-    for i in range(num_const, num_array):
-        unit_dict[temp.iloc[i,0]] = temp.iloc[i,2:n].to_numpy() # not complete this is wrong
+        for i in range(num_const):
+            unit_dict[temp.iloc[i,0]] = temp.iloc[i,1] 
+              
+        for i in range(num_const, num_array):
+            unit_dict[temp.iloc[i,0]] = temp.iloc[i,2:n].to_numpy() 
+            
+        unit_container.append(unit_dict)
+    return unit_container
 
-    print(unit_dict)
+if __name__ == "__main__":
+    data = read_input_file()
+    print(data)
