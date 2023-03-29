@@ -2,8 +2,8 @@ import pandas as pd
 
 def read_input_file(path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool.xlsx",
                     side = 0,
-                    num_const = 6, 
-                    num_array = 12):     
+                    num_const = 7, 
+                    num_array = 15):     
     group = pd.read_excel(path, sheet_name= side, index_col=[0], engine='openpyxl')
     group = [x for _, x in group.groupby('Formations')]
     unit_container = []

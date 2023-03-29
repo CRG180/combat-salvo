@@ -77,7 +77,7 @@ class Force:
 			return False
 
 	def __repr__(self):
-		return f"{self.name} -- {self.num_units} "
+		return f"{self.name} -- {self.num_units}"
 
 		
 class Engagement:
