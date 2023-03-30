@@ -33,6 +33,13 @@ class Unit:
     
     def update_num_def_missiles(self):
         pass
+	
+    @property
+	def offense_vector(self): # need off potential check, if enemy aspect hear add arg
+		_matrix = np.concatenate((self.scouting, \
+		self.training,self.distraction,self.fraction_engage),\
+		axis = 0)	
+        return _matrix.sum(axis=0)
     
     def __repr__(self) -> str:
         return f"{self.formation}"
@@ -50,8 +57,12 @@ class BattleGroup:
             self.units.append(Unit(i))
     
     @property
-    def num_formation(self):
+    def num_formation(self) -> float:
         return len(self.units)
+	
+	@property
+	def offense_matrix(self):
+		_
             
     def __str__(self) -> str:
         return f"{self.units}"
@@ -63,12 +74,11 @@ class Engagement:
         self.offensive_side = offensive_side
         
     def build_offense_matrix(self):
-        def coef(scouting, training, distraction, off_potential, fract_engage):
-            return scouting * training * distraction * off_potential *fract_engage
         
         if self.offensive_side == "blue_force":
-            off_matrix = np.zeros(self.blue_force.num_formations, self.red_fores.num_formations)
-            
+            off_matrix = np.zeros(len(self.blue_force.num_formations), len(self.red_fores.num_formations))
+			
+			
         else:
             pass
             
