@@ -1,4 +1,6 @@
-from hetrogenous_salvo_read_data import read_input_file 
+from hetrogenous_salvo_read_data import read_input_file
+import numpy as np
+
 
 class Unit:
     def __init__(self,unit_dict):
@@ -46,6 +48,10 @@ class BattleGroup:
         self.battle_group_name = battle_group_name
         for i in unit_dict:
             self.units.append(Unit(i))
+    
+    @property
+    def num_formation(self):
+        return len(self.units)
             
     def __str__(self) -> str:
         return f"{self.units}"
@@ -56,16 +62,25 @@ class Engagement:
         self.red_fores = red_force
         self.offensive_side = offensive_side
         
-    def build_offense_matrix():
+    def build_offense_matrix(self):
+        def coef(scouting, training, distraction, off_potential, fract_engage):
+            return scouting * training * distraction * off_potential *fract_engage
+        
+        if self.offensive_side == "blue_force":
+            off_matrix = np.zeros(self.blue_force.num_formations, self.red_fores.num_formations)
+            
+        else:
+            pass
+            
+        return off_matrix
+    
+    def build_defense_matrix(self):
         pass
     
-    def build_defense_matrix():
+    def decrement_attrition_values(self):
         pass
     
-    def decrement_attrition_values():
-        pass
-    
-    def salvo_engagment():
+    def salvo_engagment(self):
         pass
     
 if __name__ == "__main__":
