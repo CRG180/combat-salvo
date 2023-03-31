@@ -39,7 +39,11 @@ class Unit:
         _matrix = np.concatenate((self.scouting, \
 		self.training,self.distraction,self.fraction_engage),\
 		axis = 0)	
-        return _matrix.sum(axis=0)
+        return np.multiply.reduce(_matrix, axis=0)
+	
+	@property
+	def defense_vector(self):
+		pass
     
     def __repr__(self) -> str:
         return f"{self.formation}"
