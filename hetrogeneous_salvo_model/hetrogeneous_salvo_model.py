@@ -33,10 +33,10 @@ class Unit:
     
     def update_num_def_missiles(self):
         pass
-	
+    
     @property
-	def offense_vector(self): # need off potential check, if enemy aspect hear add arg
-		_matrix = np.concatenate((self.scouting, \
+    def offense_vector(self): # need off potential check, if enemy aspect hear add arg
+        _matrix = np.concatenate((self.scouting, \
 		self.training,self.distraction,self.fraction_engage),\
 		axis = 0)	
         return _matrix.sum(axis=0)
@@ -59,10 +59,10 @@ class BattleGroup:
     @property
     def num_formation(self) -> float:
         return len(self.units)
-	
-	@property
-	def offense_matrix(self):
-		_
+    
+    @property
+    def offense_matrix(self):
+        pass
             
     def __str__(self) -> str:
         return f"{self.units}"
