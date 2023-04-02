@@ -35,15 +35,17 @@ class Unit:
         pass
     
     @property
-    def offense_vector(self): # need off potential check, if enemy aspect hear add arg
-        _matrix = np.concatenate((self.scouting, \
-		self.training,self.distraction,self.fraction_engage),\
+    def offense_vector(self) -> np.array: # check this 
+        _matrix = np.concatenate(([self.scouting], \
+		[self.training],[self.distraction],[self.fraction_engage]),\
 		axis = 0)	
         return np.multiply.reduce(_matrix, axis=0)
-	
-	@property
-	def defense_vector(self):
-		pass
+    
+    @property
+    def defense_vector(self)-> np.array: # parameters need to be rechecked
+        _matrix = np.concatenate(([self.defense_capability], \
+            [self.alertness], [self.fraction_engage]), axis=0)
+        return np.multiply.reduce(_matrix, axis = 0)
     
     def __repr__(self) -> str:
         return f"{self.formation}"
@@ -61,44 +63,56 @@ class BattleGroup:
             self.units.append(Unit(i))
     
     @property
-    def num_formation(self) -> float:
-        return len(self.units)
+    def formation_vec(self) -> np.array:
+        _vector = np.array([u.num_units for u in self.units])
+        return _vector
     
     @property
-    def offense_matrix(self):
-        pass
-            
+    def offense_matrix(self) -> np.array:
+        _matrix = np.vstack([u.offense_vector for u in self.units])
+        return _matrix
+    
+    @property
+    def defense_matrix(self) -> np.array:
+        _matrix = np.vstack([u.defense_vector for u in self.units])
+        _matrix = np.sum(_matrix, axis=0)
+        _matrix = np.diag(_matrix)
+        return _matrix
+    
     def __str__(self) -> str:
         return f"{self.units}"
 
 class Engagement:
     def __init__(self,blue_force, red_force, offensive_side = "blue_force"):
         self.blue_force = blue_force 
-        self.red_fores = red_force
+        self.red_force = red_force
         self.offensive_side = offensive_side
         
-    def build_offense_matrix(self):
+    def salvo(self):
+        off = np.matmul(self.blue_force.offense_matrix,\
+            self.blue_force.formation_vec)
+        defen = np.matmul(self.red_force.defense_matrix,\
+             self.red_force.formation_vec )
+        return (off - defen)
         
-        if self.offensive_side == "blue_force":
-            off_matrix = np.zeros(len(self.blue_force.num_formations), len(self.red_fores.num_formations))
-			
-			
-        else:
-            pass
-            
-        return off_matrix
-    
-    def build_defense_matrix(self):
-        pass
-    
     def decrement_attrition_values(self):
         pass
     
-    def salvo_engagment(self):
+    def iter_salvo(self):
         pass
     
 if __name__ == "__main__":
-    data = read_input_file()
-    b = BattleGroup(data)
-    print(b)
+    data_a = read_input_file(side=0)
+    data_b = read_input_file(side=0)
+    a = BattleGroup(data_a, battle_group_name="blue")
+    b = BattleGroup(data_b,battle_group_name="red")
+    print("b offense")
+    print(b.offense_matrix)
+    print("b formation_vec")
+    print(b.formation_vec)
+    print("b defene matrix")
+    print(b.defense_matrix)
+    #print(b.units[0].offense_vector)
+    e = Engagement(a,b)
+    print(e.salvo())
     
