@@ -68,7 +68,7 @@ class Unit:
     
     @property
     def scouting(self):
-        check_value_0_1(self.unit_dict["scouting"],self.formation)
+        check_value_0_1(self.unit_dict["scouting"], "Scouting",self.formation)
         return self.unit_dict["scouting"]
     
     @property
