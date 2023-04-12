@@ -1,5 +1,21 @@
 from hetrogenous_salvo_read_data import read_input_file
 import numpy as np
+import warnings
+
+def check_0_1(input, formation):
+    for i in input:
+        if i < 0 or i > 1:
+            raise Exception(f"{formation}: Value is less than O or greater than 1 --- {input}")
+        else:
+            continue
+        
+def sum_1(input, formation):
+    if sum(input) > 1:
+        raise Exception(f"{formation}: Vector sum is greater than 1 --- {input}")
+    if sum(input) < 0:
+        Exception(f"{formation}: Vector sum is less than 0 --- {input}")
+    if sum(input) != 1:
+        warnings.warn(f"{formation}: Vector does not sum to 1 --- {input}")              
 
 
 class Unit:
@@ -15,10 +31,16 @@ class Unit:
         self.fraction_engage = unit_dict["fraction_engage"]
         self.defense_capability = unit_dict["defense_capability "]
         self.staying_power = unit_dict["staying_power"]
-        self.scouting = unit_dict["scouting"]
+        self.scouting = unit_dict["scouting"]               
         self.alertness = unit_dict["alertness"]
         self.training = unit_dict["training"]
         self.distraction = unit_dict["distraction"]
+        
+        for i in [self.fraction_engage]:
+            sum_1(i, self.formation)
+        
+        for i in [self.scouting, self.alertness, self.training, self.distraction]:
+            check_0_1(i, self.formation)
     
     @property
     def offense_shots_available(self):
