@@ -68,6 +68,10 @@ class Unit:
         _matrix = np.concatenate(([self.defense_capability], \
             [self.alertness], [self.fraction_engage]), axis=0)
         return np.multiply.reduce(_matrix, axis = 0)
+
+    def __sub__(self, other):
+        self.num_units -= other
+        return None
     
     def __repr__(self) -> str:
         return f"{self.formation}"
@@ -108,17 +112,33 @@ class Engagement:
     def __init__(self,blue_force, red_force, offensive_side = "blue_force"):
         self.blue_force = blue_force 
         self.red_force = red_force
-        self.offensive_side = offensive_side
+        self._offensive_side = offensive_side
         
     def salvo(self):
-        off = np.matmul(self.blue_force.offense_matrix,\
-            self.blue_force.formation_vec)
-        defen = np.matmul(self.red_force.defense_matrix,\
-             self.red_force.formation_vec )
-        return (off - defen)
+        if self._offensive_side == "blue_force":
+            off = np.matmul(self.blue_force.offense_matrix,\
+                self.blue_force.formation_vec)
+            defen = np.matmul(self.red_force.defense_matrix,\
+                self.red_force.formation_vec )
+            return (off - defen)
+
+        if self._offensive_side == "red_force":
+            off = np.matmul(self.red_force.offense_matrix,\
+                self.red_force.formation_vec)
+            defen = np.matmul(self.blue_force.defense_matrix,\
+                self.blue_force.formation_vec )
+            return (off - defen)
         
-    def decrement_attrition_values(self):
-        pass
+    def decrement_attrition_values(self, decrement_vec):
+        if self._offensive_side == "blue_force":
+            for unit, dec_val in zip(self.blue_force.units, decrement_vec):
+                unit - dec_val
+            return None
+
+        if self._offensive_side == "red_force":
+            for unit, dec_val in zip(self.blue_force.units, decrement_vec):
+                unit - dec_val
+            return None
     
     def iter_salvo(self):
         pass
@@ -128,13 +148,17 @@ if __name__ == "__main__":
     data_b = read_input_file(side=0)
     a = BattleGroup(data_a, battle_group_name="blue")
     b = BattleGroup(data_b,battle_group_name="red")
-    print("b offense")
-    print(b.offense_matrix)
-    print("b formation_vec")
-    print(b.formation_vec)
-    print("b defene matrix")
-    print(b.defense_matrix)
+    # print("b offense")
+    # print(b.offense_matrix)
+    # print("b formation_vec")
+    # print(b.formation_vec)
+    # print("b defene matrix")
+    # print(b.defense_matrix)
     #print(b.units[0].offense_vector)
     e = Engagement(a,b)
     print(e.salvo())
+   # print(e.decrement_attrition_values([0,1,2]))
+    print(e.blue_force.units[0])
+    e.decrement_attrition_values([1,1,2])
+    print(e.blue_force.units[0])
     
