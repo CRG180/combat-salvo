@@ -49,13 +49,7 @@ class Unit:
     @property
     def defense_shots_available(self):
         return self.num_units * self.num_missiles_def
-    
-    def update_num_off_missiles(self):
-        pass
-    
-    def update_num_def_missiles(self):
-        pass
-    
+      
     @property
     def offense_vector(self) -> np.array: # check this 
         _matrix = np.concatenate(([self.scouting], \
@@ -113,6 +107,7 @@ class Engagement:
         self.blue_force = blue_force 
         self.red_force = red_force
         self._offensive_side = offensive_side
+        self.winning_side = None
         
     def salvo(self):
         if self._offensive_side == "blue_force":
@@ -140,8 +135,21 @@ class Engagement:
                 unit - dec_val
             return None
     
+    def check_win_criteria(self):
+        pass
+    
     def iter_salvo(self):
         pass
+
+class SimultaneousSalvo(Engagement):
+    def iter_salvo(self):
+        print("iter Salvo")
+
+class SurpriseSalvo(Engagement):
+    def iter_salvo(self):
+        print("iter Salvo")
+        
+
     
 if __name__ == "__main__":
     data_a = read_input_file(side=0)
@@ -155,7 +163,7 @@ if __name__ == "__main__":
     # print("b defene matrix")
     # print(b.defense_matrix)
     #print(b.units[0].offense_vector)
-    e = Engagement(a,b)
+    e = SimultaneousSalvo(a,b)
     print(e.salvo())
    # print(e.decrement_attrition_values([0,1,2]))
     print(e.blue_force.units[0])
