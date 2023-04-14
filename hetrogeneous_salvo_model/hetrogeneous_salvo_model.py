@@ -3,6 +3,8 @@ import numpy as np
 import warnings
 
 def check_0_1(input, formation):
+    '''Checks Unit class input vectors to ensure each value
+    is between O and 1'''
     for i in input:
         if i < 0 or i > 1:
             raise Exception(f"{formation}: Value is less than O or greater than 1 --- {input}")
@@ -10,10 +12,12 @@ def check_0_1(input, formation):
             continue
         
 def sum_1(input, formation):
+    '''Check Unit class input vectors to ensure it sums to or less than the value of 1.
+    Vector sums cannot be negative. A warning is given when values does not sum to 1'''
     if sum(input) > 1:
         raise Exception(f"{formation}: Vector sum is greater than 1 --- {input}")
     if sum(input) < 0:
-        Exception(f"{formation}: Vector sum is less than 0 --- {input}")
+        raise Exception(f"{formation}: Vector sum is less than 0 --- {input}")
     if sum(input) != 1:
         warnings.warn(f"{formation}: Vector does not sum to 1 --- {input}")              
 
@@ -43,11 +47,11 @@ class Unit:
             check_0_1(i, self.formation)
     
     @property
-    def offense_shots_available(self):
+    def offense_shots_available(self) -> float:
         return self.num_units * self.num_missiles_off
         
     @property
-    def defense_shots_available(self):
+    def defense_shots_available(self) -> float:
         return self.num_units * self.num_missiles_def
       
     @property
@@ -63,7 +67,7 @@ class Unit:
             [self.alertness], [self.fraction_engage]), axis=0)
         return np.multiply.reduce(_matrix, axis = 0)
 
-    def __sub__(self, other):
+    def __sub__(self, other) -> None:
         self.num_units -= other
         return None
     
@@ -109,7 +113,7 @@ class Engagement:
         self._offensive_side = offensive_side
         self.winning_side = None
         
-    def salvo(self):
+    def salvo(self) -> np.array:
         if self._offensive_side == "blue_force":
             off = np.matmul(self.blue_force.offense_matrix,\
                 self.blue_force.formation_vec)
@@ -124,7 +128,7 @@ class Engagement:
                 self.blue_force.formation_vec )
             return (off - defen)
         
-    def decrement_attrition_values(self, decrement_vec):
+    def decrement_attrition_values(self, decrement_vec) -> None:
         if self._offensive_side == "blue_force":
             for unit, dec_val in zip(self.blue_force.units, decrement_vec):
                 unit - dec_val
