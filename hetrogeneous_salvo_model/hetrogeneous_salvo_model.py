@@ -33,7 +33,7 @@ class Unit:
         self.num_missiles_def = unit_dict["num_missiles_def"]
         self.aimed_offense  = unit_dict["aimed_offense"]
         self.fraction_engage = unit_dict["fraction_engage"]
-        self.defense_capability = unit_dict["defense_capability "]
+        self.defense_capability = unit_dict["defense_capability"]
         self.staying_power = unit_dict["staying_power"]
         self.scouting = unit_dict["scouting"]               
         self.alertness = unit_dict["alertness"]
@@ -64,11 +64,18 @@ class Unit:
     @property
     def defense_vector(self)-> np.array: # parameters need to be rechecked
         _matrix = np.concatenate(([self.defense_capability], \
-            [self.alertness], [self.fraction_engage]), axis=0)
+            [self.alertness]), axis=0)
         return np.multiply.reduce(_matrix, axis = 0)
 
     def __sub__(self, other) -> None:
+        '''Method overload for to decrment the number of units during 
+        engagment. The conditional prevents the number of units being negative'''
+        _last_value = self.num_units
         self.num_units -= other
+        if self.num_units > _last_value:
+            warnings.warn(f"{self.formation}: __Sub__ resulted in greater number than last iter")
+        if self.num_units < 0:
+            self.num_units = 0 
         return None
     
     def __repr__(self) -> str:
@@ -104,50 +111,107 @@ class BattleGroup:
         return _matrix
     
     def __str__(self) -> str:
-        return f"{self.units}"
+        return "\n".join(f"{unit.formation} -- {unit.num_units}" for unit in self.units)
+
 
 class Engagement:
+    
     def __init__(self,blue_force, red_force, offensive_side = "blue_force"):
         self.blue_force = blue_force 
         self.red_force = red_force
         self._offensive_side = offensive_side
         self.winning_side = None
+        self.blue_attrited = False 
+        self.red_attrited = False 
+        self.iter_num = 0
+    
+    @property
+    def battle_complete(self):
+        if self.red_attrited or self.blue_attrited:
+            return True
+        else:
+            return False
+        
+    def attrit_units(self, attrit_vec) ->None:
+        if self._offensive_side == "blue_force":
+            for unit, dec_val in zip(self.red_force.units, attrit_vec):
+                unit - max(dec_val,0)
+            return None
+    
+        if self._offensive_side == "red_force":
+            for unit, dec_val in zip(self.blue_force.units, attrit_vec):
+                unit - max(dec_val, 0)
+            return None
+        
         
     def salvo(self) -> np.array:
+        
         if self._offensive_side == "blue_force":
+
             off = np.matmul(self.blue_force.offense_matrix,\
                 self.blue_force.formation_vec)
+            
             defen = np.matmul(self.red_force.defense_matrix,\
                 self.red_force.formation_vec )
-            return (off - defen)
+            
+            _red_attrit_vec = off-defen
+            print(f"{self.iter_num} -- _red_attrit_vec {_red_attrit_vec }" )
+
+            return _red_attrit_vec
 
         if self._offensive_side == "red_force":
+            
             off = np.matmul(self.red_force.offense_matrix,\
                 self.red_force.formation_vec)
+            
             defen = np.matmul(self.blue_force.defense_matrix,\
                 self.blue_force.formation_vec )
-            return (off - defen)
+            
+            _blue_attrit_vec = off-defen
+            print(f"{self.iter_num} -- _blue_attrit_vec {_blue_attrit_vec }" )
+            
+            return _blue_attrit_vec
         
-    def decrement_attrition_values(self, decrement_vec) -> None:
-        if self._offensive_side == "blue_force":
-            for unit, dec_val in zip(self.blue_force.units, decrement_vec):
-                unit - dec_val
-            return None
-
-        if self._offensive_side == "red_force":
-            for unit, dec_val in zip(self.blue_force.units, decrement_vec):
-                unit - dec_val
-            return None
-    
     def check_win_criteria(self):
-        pass
+        if sum(self.red_force.formation_vec) < 1:
+            self.red_attrited = True 
+        if sum(self.blue_force.formation_vec) < 1:
+            self.blue_attrited = True 
+        return None     
     
-    def iter_salvo(self):
-        pass
+    def iter_salvo(self, max_iter = 20):
+        for u in self.blue_force.units:
+            print(u)
+        for u in self.red_force.units:
+            print(u)
+
+        while self.iter_num < max_iter and not self.battle_complete:
+            
+            print(f"------ Salvo Iteration {self.iter_num} Battle compelte {self.battle_complete} --------")
+            
+            self._offensive_side = "blue_force"
+            _red_attrit = self.salvo()
+            
+            self._offensive_side = "red_force"
+            _blue_attrit = self.salvo()
+            
+            self._offensive_side = "blue_force"
+            self.attrit_units(_red_attrit)
+            
+            self._offensive_side = "red_force"
+            self.attrit_units(_blue_attrit)
+            
+            self.check_win_criteria()
+            self.iter_num+=1  
+            print(self.red_force)
+            print(self.blue_force)
+            
+    
+            
+        
 
 class SimultaneousSalvo(Engagement):
-    def iter_salvo(self):
-        print("iter Salvo")
+    pass
 
 class SurpriseSalvo(Engagement):
     def iter_salvo(self):
@@ -157,20 +221,23 @@ class SurpriseSalvo(Engagement):
     
 if __name__ == "__main__":
     data_a = read_input_file(side=0)
-    data_b = read_input_file(side=0)
+    data_b = read_input_file(side=1)
     a = BattleGroup(data_a, battle_group_name="blue")
     b = BattleGroup(data_b,battle_group_name="red")
-    # print("b offense")
-    # print(b.offense_matrix)
-    # print("b formation_vec")
-    # print(b.formation_vec)
-    # print("b defene matrix")
-    # print(b.defense_matrix)
-    #print(b.units[0].offense_vector)
+    print("Red offense")
+    print(b.offense_matrix)
+    print("Blue offense")
+    print(a.offense_matrix)
+    print("Red formation_vec")
+    print(b.formation_vec)
+    print("Blue formation_vec")
+    print(a.formation_vec)
+    print("Blue Def Mat")
+    print(a.defense_matrix)
+    print("red def matrix")
+    print(b.defense_matrix)
+
     e = SimultaneousSalvo(a,b)
-    print(e.salvo())
-   # print(e.decrement_attrition_values([0,1,2]))
-    print(e.blue_force.units[0])
-    e.decrement_attrition_values([1,1,2])
-    print(e.blue_force.units[0])
+    e.iter_salvo()
+    
     
