@@ -1,13 +1,13 @@
 # Combat-salvo
 
-Combat salvo provides two low-resolution models: homogeneous and heterogenous salvo models based on the work published by CAPT Wayne P. Hughes. The homogenous model aggregates two forces to assess attrition via differential equations representing the offensive and defensive capabilities of each side. The heterogenous model accounts for multiple units in each force to provide understanding of the contribution of system or units to a greater force.  
+Combat salvo provides two low-resolution models: homogeneous and heterogeneous salvo models based on the work published by CAPT Wayne P. Hughes. The homogeneous model aggregates two forces to assess attrition via differential equations representing the offensive and defensive capabilities of each side. The heterogeneous model accounts for multiple units in each force to provide understanding of the contribution of system or units to a greater force.  
 
 
 # Project is a work in progress and not ready for use 
 
 ## Areas for contribution
 
-### Homogenous Model
+### Homogeneous Model
 
 * DOE input support
 
@@ -17,7 +17,7 @@ Combat salvo provides two low-resolution models: homogeneous and heterogenous sa
 
 
 
-### Heterogenous Model
+### Heterogeneous Model
 
 * Unit Test
 
@@ -33,7 +33,7 @@ Combat salvo provides two low-resolution models: homogeneous and heterogenous sa
 
 
 
-## R Code to help understanding of the the Hetrogenous Salvo Model 
+## R Code to help understanding of the theHeterogeneous Salvo Model 
 
 ```
 #A_i units  3 x units
