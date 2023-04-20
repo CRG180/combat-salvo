@@ -33,7 +33,7 @@ Combat salvo provides two low-resolution models: homogeneous and heterogeneous s
 
 
 
-## R Code to help understanding of the theHeterogeneous Salvo Model 
+## R Code to help understanding of the the Heterogeneous Salvo Model 
 
 ```
 #A_i units  3 x units
@@ -44,8 +44,8 @@ Combat salvo provides two low-resolution models: homogeneous and heterogeneous s
 # O is an j X i  matrix 
 # This matrix describes how many shot each "B" unit type (B1, B2 ..) fires at each "A" unit type 
 #             B1  B2 B3 B4
-(O <-matrix(c( 2, 0,  1, 0,  #A1  So, Type B1 fires 2 rnds at Type A1 and Type B3 fires 1 rnd at A1
-               0, .8, 0, 0,  #A2  So, Type A2 fires a degraded shot at Type B2 Maybe due to bad scouting..  
+(O <-matrix(c( 2, 0,  1, 0,  #A1  So, Type B1 fires 2 rnds at type A1 and type B3 fires 1 rnd at A1
+               0, .8, 0, 0,  #A2  So, Type A2 fires a degraded shot at type B2 Maybe due to bad scouting..  
                0,  0, 0, 2  #A3   You get the point 
               ),
             nrow = 3, byrow = T))
@@ -58,7 +58,7 @@ dim(O)
 
 dim(B)
 (off <-O %*% B) #  3 x 1 in terms of A_i units 
-                # "A units about to be his with this array of salvos
+                # "A units about to be hit with this array of salvos
 
 
 # D is an  i X i  matrix         Each row value is a sum defense coefficient on the diag
