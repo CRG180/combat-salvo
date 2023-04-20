@@ -101,12 +101,12 @@ class BattleGroup:
     @property
     def offense_matrix(self) -> np.array:
         _matrix = np.vstack([u.offense_vector for u in self.units])
-        return _matrix
+        return np.transpose(_matrix)
     
     @property
     def defense_matrix(self) -> np.array:
         _matrix = np.vstack([u.defense_vector for u in self.units])
-        _matrix = np.sum(_matrix, axis=0)
+        _matrix = np.sum(_matrix, axis=1)
         _matrix = np.diag(_matrix)
         return _matrix
     
@@ -220,21 +220,21 @@ class SurpriseSalvo(Engagement):
 
     
 if __name__ == "__main__":
-    data_a = read_input_file(side=0)
-    data_b = read_input_file(side=1)
-    a = BattleGroup(data_a, battle_group_name="blue")
-    b = BattleGroup(data_b,battle_group_name="red")
-    print("Red offense")
+    data_a = read_input_file( path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool_v3.xlsx",side=0)
+    data_b = read_input_file(path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool_v3.xlsx",side=1)
+    a = BattleGroup(data_a, battle_group_name="B Force")
+    b = BattleGroup(data_b,battle_group_name="A Force")
+    print("A offense")
     print(b.offense_matrix)
-    print("Blue offense")
+    print("B offense")
     print(a.offense_matrix)
-    print("Red formation_vec")
+    print("A formation_vec")
     print(b.formation_vec)
-    print("Blue formation_vec")
+    print("B formation_vec")
     print(a.formation_vec)
-    print("Blue Def Mat")
+    print("B Def Mat")
     print(a.defense_matrix)
-    print("red def matrix")
+    print("A def matrix")
     print(b.defense_matrix)
 
     e = SimultaneousSalvo(a,b)
