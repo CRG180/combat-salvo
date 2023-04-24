@@ -1,0 +1,25 @@
+[project]
+name = "Combat Salvo"
+version = "0.0.1"
+authors = [
+  { name="Charles Gallagher, email="charles.gallagher07@gmail.com" },
+]
+description = "Combat salvo provides two low-resolution models: 
+homogeneous and heterogeneous salvo models based on the work published 
+by CAPT Wayne P. Hughes. The homogeneous model aggregates two forces 
+to assess attrition via differential equations representing the 
+offensive and defensive capabilities of each side. 
+The heterogeneous model accounts for multiple units in each force to
+ provide understanding of the contribution of system or units to a greater force."
+
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/CRG180/combat-salvo"
+"Bug Tracker" = "https://github.com/CRG180/combat-salvo/issues"

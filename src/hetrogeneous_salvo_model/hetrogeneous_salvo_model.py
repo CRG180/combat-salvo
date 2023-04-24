@@ -23,6 +23,51 @@ def sum_1(input, formation):
 
 
 class Unit:
+    """A class to provide data for a single unit for a heterogeous model.  
+    
+	...
+ 
+	Attributes
+    ----------
+	formation: str
+		unit formation's name
+    type: str
+        type class e.g. rocket company
+    mgrs: str
+        position in MRGS cordinates
+    range: int:
+        max offensive weapon range
+	num_units: int
+		number of units in the formation
+    num_missiles_off int: 
+        number of offensive missiles available
+    num_missiles_def int: 
+        number of defensive missiles available
+	aimed_offense int:
+		the number of well-aimed missiles fired by each unit per enemey target per salvo.
+    fraction_engage num:
+        fraction the units that engage each enemy target {[0,1]}
+	defense_capability int:
+		 number of well-aimed attacking missiles eliminated by each unit per salvo.
+	staying int:
+		 number of missiles required to place an unit out of action.
+	scouting num:
+		 scouting effectiveness against each enemy unit {[0,1]}.
+	alertness num:
+		 defender alertness against each enemy unit [0,1].
+	training num:
+		training effectiveness against each enemy unit [0,1].
+	distraction num:
+		distraction factor against each enemy unit [0,1].
+	
+	Methods
+     -------
+	__sub__(self, other):
+		'Method overload for to decrment the number of units during 
+        engagment
+
+	"""
+ 
     def __init__(self,unit_dict):
         self.formation = unit_dict["formation"]
         self.type = unit_dict["type"]
@@ -56,7 +101,7 @@ class Unit:
       
     @property
     def offense_vector(self) -> np.array: # check this 
-        _matrix = np.concatenate(([self.scouting], \
+        _matrix = np.concatenate(([self.aimed_offense , self.scouting], \
 		[self.training],[self.distraction],[self.fraction_engage]),\
 		axis = 0)	
         return np.multiply.reduce(_matrix, axis=0)
@@ -96,6 +141,11 @@ class BattleGroup:
     @property
     def formation_vec(self) -> np.array:
         _vector = np.array([u.num_units for u in self.units])
+        return _vector
+    
+    @property
+    def staying_power_vec(self) -> np.array:
+        _vector = np.array([u.staying_power for u in self.units])
         return _vector
     
     @property
@@ -154,8 +204,7 @@ class Engagement:
             defen = np.matmul(self.red_force.defense_matrix,\
                 self.red_force.formation_vec )
             
-            _red_attrit_vec = off-defen
-            print(f"{self.iter_num} -- _red_attrit_vec {_red_attrit_vec }" )
+            _red_attrit_vec = (off-defen) / self.red_force.staying_power_vec
 
             return _red_attrit_vec
 
@@ -167,8 +216,7 @@ class Engagement:
             defen = np.matmul(self.blue_force.defense_matrix,\
                 self.blue_force.formation_vec )
             
-            _blue_attrit_vec = off-defen
-            print(f"{self.iter_num} -- _blue_attrit_vec {_blue_attrit_vec }" )
+            _blue_attrit_vec = (off-defen) / self.blue_force.staying_power_vec
             
             return _blue_attrit_vec
         
@@ -187,7 +235,7 @@ class Engagement:
 
         while self.iter_num < max_iter and not self.battle_complete:
             
-            print(f"------ Salvo Iteration {self.iter_num} Battle compelte {self.battle_complete} --------")
+            print(f"------ Salvo Iteration {self.iter_num +1 }--------")
             
             self._offensive_side = "blue_force"
             _red_attrit = self.salvo()
@@ -206,10 +254,6 @@ class Engagement:
             print(self.red_force)
             print(self.blue_force)
             
-    
-            
-        
-
 class SimultaneousSalvo(Engagement):
     pass
 
@@ -220,8 +264,9 @@ class SurpriseSalvo(Engagement):
 
     
 if __name__ == "__main__":
-    data_a = read_input_file( path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool_v3.xlsx",side=0)
-    data_b = read_input_file(path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool_v3.xlsx",side=1)
+    file_path = "hetrogeneous_salvo_model/data/hetrogeneous_salvo_data_input_tool_v3.xlsx"
+    data_a = read_input_file( path = file_path,side=0)
+    data_b = read_input_file(path = file_path,side=1)
     a = BattleGroup(data_a, battle_group_name="B Force")
     b = BattleGroup(data_b,battle_group_name="A Force")
     print("A offense")

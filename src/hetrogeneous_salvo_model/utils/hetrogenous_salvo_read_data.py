@@ -2,7 +2,7 @@ import pandas as pd
 
 def read_input_file(path = "hetrogeneous_salvo_model/hetrogeneous_salvo_data_input_tool.xlsx",
                     side = 0,
-                    num_const = 7, 
+                    num_const = 8, 
                     num_array = 15)-> dict:     
     group = pd.read_excel(path, sheet_name= side, index_col=[0], engine='openpyxl')
     group = [x for _, x in group.groupby('Formations')]
