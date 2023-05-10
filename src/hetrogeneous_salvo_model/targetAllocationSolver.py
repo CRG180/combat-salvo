@@ -4,7 +4,7 @@ from ortools.linear_solver import pywraplp
 import numpy as np
 
 #Example data for blue targeting red 
-
+#
     #R1 #R2 #R3 #R4
 #B1  X   X   X   
 #B2  X           X
