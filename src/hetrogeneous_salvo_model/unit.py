@@ -92,6 +92,13 @@ class Unit:
         
         for i in [self.scouting, self.alertness, self.training, self.distraction]:
             check_0_1(i, self.formation)
+            
+    @property
+    def unit_dead(self) -> bool:
+        if self.num_units > 0:
+            return False
+        else:
+            return True 
     
     @property
     def offense_shots_available(self) -> float:
