@@ -86,6 +86,9 @@ class Engagement:
 		self.b = force_b
 		self.iter = 0
 	
+	def get_salvos_fired(self):
+		return self.iter
+	
 	def salvo_engagement(self):
 		'''simultaneous enagagement both A and B fire at the same time'''
 		# B fires at A, damage to A is calculated
@@ -117,6 +120,7 @@ class Engagement:
 		Remaing combat power:{nl} \
 		{self.a.name}: {self.a.num_units} {nl} \
 		{self.b.name}: {self.b.num_units}" )
+
 	
 if __name__ == "__main__":
 	a = Force(name="side A",num_units= 6,
