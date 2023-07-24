@@ -73,17 +73,12 @@ def write_results_to_file(results):
 if __name__ == "__main__":
     import os
     current_directory = os.getcwd()
+
     print("Current Working Directory:", current_directory)
     
-    doe_parameters = read_doe_parameters_from_csv("data/doe_input.csv")
+    doe_parameters = read_doe_parameters_from_csv("src/homogeneous_salvo_model/data/doe_input.csv")
 
-    results = []
+    write_results_to_file(doe_parameters )
 
-    for idx, (a, b) in enumerate(doe_parameters, start=1):
-        print(f"Running Experiment {idx} - {a.name} vs {b.name}")
-        battle = Engagement(a, b)
-        battle.iter_engagement()
+  
 
-        results.append((a, b))
-
-    write_results_to_file(results)
