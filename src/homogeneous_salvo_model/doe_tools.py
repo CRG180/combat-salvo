@@ -7,7 +7,54 @@ import multiprocessing
 from homogeneous_salvo_model import Force, Engagement
 
 class DOESimulation:
+    """
+    A class to represent a Design of Experiments simulation for a homogeneous salvo model.
+
+    ...
+
+    Attributes
+    ----------
+    input_file_path : str
+        The path to the input CSV file containing the DOE parameters.
+    output_file_path : str, optional
+        The path to the output CSV file for writing the results.
+    doe_parameters : list
+        A list of tuples containing pairs of Force objects representing the DOE parameters.
+    results : list
+        A list to store the results of simulations.
+
+    Methods
+    -------
+    __init__(self, input_file_path, output_file_path=None)
+        Initializes a new instance of the DOESimulation class.
+
+    read_doe_parameters(self)
+        Reads the DOE parameters from the input CSV file.
+
+    run_simulations(self)
+        Runs the simulations sequentially (non-parallel) and stores the results.
+
+    run_simulations_parallel(self)
+        Runs the simulations using parallel processing and stores the results.
+
+    write_results_to_file(self, include_input_parameters=False)
+        Writes the simulation results to a CSV file.
+
+    display_results(self, include_input_parameters=False)
+        Displays the simulation results in the terminal.
+    """
     def __init__(self, input_file_path, output_file_path=None):
+        """
+        Initializes a new instance of the DOESimulation class.
+
+        Parameters
+        ----------
+        input_file_path : str
+            The path to the input CSV file containing the DOE parameters.
+        output_file_path : str, optional
+            The path to the output CSV file for writing the results. If not provided, a default filename
+            will be generated based on the current date and time.
+        """
         self.input_file_path = input_file_path
         self.output_file_path = output_file_path
         self.doe_parameters = []
@@ -20,6 +67,9 @@ class DOESimulation:
             self.output_file_path = os.path.join(os.path.dirname(input_file_path), output_file_name)
 
     def read_doe_parameters(self):
+        """
+        Reads the DOE parameters from the input CSV file.
+        """
         with open(self.input_file_path, newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -44,6 +94,9 @@ class DOESimulation:
                 self.doe_parameters.append((force_A, force_B))
 
     def run_simulations(self):
+        """
+        Runs the simulations sequentially (non-parallel) and stores the results.
+        """
         for idx, (a, b) in enumerate(self.doe_parameters, start=1):
             battle = Engagement(a, b)
             battle.iter_engagement()
@@ -51,6 +104,9 @@ class DOESimulation:
         print(f"Simulation completed {idx} runs.")
 
     def run_simulations_parallel(self):
+        """
+        Runs the simulations using parallel processing and stores the results.
+        """
         with multiprocessing.Pool() as pool:
             def run_single_simulation(experiment):
                 a, b = experiment
@@ -64,6 +120,14 @@ class DOESimulation:
         # ...
 
     def write_results_to_file(self, include_input_parameters=False):
+        """
+        Writes the simulation results to a CSV file.
+
+        Parameters
+        ----------
+        include_input_parameters : bool, optional
+            If True, includes the input parameters of the simulations in the output CSV file. Default is False.
+        """
         with open(self.output_file_path, "w", newline="") as csvfile:
             fieldnames = ["Experiment", "Side A", "Side B", "Winner", "Salvos Fired"]
             if include_input_parameters:
@@ -88,6 +152,14 @@ class DOESimulation:
         print(f"Results written to {self.output_file_path}")
 
     def display_results(self, include_input_parameters=False):
+        """
+        Displays the simulation results in the terminal.
+
+        Parameters
+        ----------
+        include_input_parameters : bool, optional
+            If True, includes the input parameters of the simulations in the terminal output. Default is False.
+        """
         print("\nResults:\n")
         for idx, (a, b, salvos_fired) in enumerate(self.results, start=1):
             print(f"Experiment {idx}")
@@ -104,8 +176,8 @@ class DOESimulation:
 
 
 if __name__ == "__main__":
-    current_directory = os.getcwd()
-    print("Current Working Directory:", current_directory)
+    #current_directory = os.getcwd()
+    #print("Current Working Directory:", current_directory)
 
     doe_simulation = DOESimulation("data/doe_input.csv")
     doe_simulation.read_doe_parameters()
