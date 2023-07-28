@@ -1,0 +1,6 @@
+name_A,num_units_A,aimed_offense_A,num_missiles_A,defense_capability_A,defense_staying_A,name_B,num_units_B,aimed_offense_B,num_missiles_B,defense_capability_B,defense_staying_B
+Side A,10,3,20,3,5,Side B,8,4,15,4,6
+Side A,15,5,25,4,6,Side B,6,3,18,3,4
+Side A,12,4,22,5,4,Side B,10,4,20,3,5
+Side A,20,5,30,4,5,Side B,5,2,15,2,3
+Side A,8,3,18,3,3,Side B,12,4,24,4,4

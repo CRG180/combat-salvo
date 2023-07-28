@@ -86,6 +86,9 @@ class Engagement:
 		self.b = force_b
 		self.iter = 0
 	
+	def get_salvos_fired(self):
+		return self.iter
+	
 	def salvo_engagement(self):
 		'''simultaneous enagagement both A and B fire at the same time'''
 		# B fires at A, damage to A is calculated
@@ -106,17 +109,17 @@ class Engagement:
 		else:
 			return "Stalemate"
 	
-	def iter_engagement(self):
+	def iter_engagement(self, print_results = False):
 		while self.a > 0 and self.b > 0:
 			self.salvo_engagement()
-			print(self.a.name, self.a.num_units)
-			print(self.b.name, self.b.num_units)
-		nl = "\n"
-		return print(
-		f"{nl} Battle complete after {self.iter} iterations. The winner is {self.wining_force()}{nl}. \
-		Remaing combat power:{nl} \
-		{self.a.name}: {self.a.num_units} {nl} \
-		{self.b.name}: {self.b.num_units}" )
+		if print_results:
+			nl = "\n"
+			return print(
+			f"{nl} Battle complete after {self.iter} iterations. The winner is {self.wining_force()}{nl}. \
+			Remaing combat power:{nl} \
+			{self.a.name}: {self.a.num_units} {nl} \
+			{self.b.name}: {self.b.num_units}" )
+
 	
 if __name__ == "__main__":
 	a = Force(name="side A",num_units= 6,
@@ -130,8 +133,6 @@ if __name__ == "__main__":
 			num_missiles = 10,
 			defense_capability =2,
 			defense_staying =2)
-
-	print(a)
 
 	battle_1 = Engagement(a,b)
 	print(a.num_units, b.num_units)
