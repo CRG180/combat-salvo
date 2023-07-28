@@ -1,4 +1,3 @@
-
 import csv
 import itertools
 import os
@@ -115,9 +114,6 @@ class DOESimulation:
                 return a, b, battle.iter
 
             self.results = pool.map(run_single_simulation, self.doe_parameters)
-
-        # Process the results as needed (e.g., write to CSV file or display in terminal)
-        # ...
 
     def write_results_to_file(self, include_input_parameters=False):
         """
