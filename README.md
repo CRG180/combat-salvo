@@ -1,17 +1,15 @@
 # Combat-salvo
 
-Combat salvo provides two low-resolution models: homogeneous and heterogeneous salvo models based on the work published by CAPT Wayne P. Hughes. The homogeneous model aggregates two forces to assess attrition via differential equations representing the offensive and defensive capabilities of each side. The heterogeneous model accounts for multiple units in each force to provide understanding of the contribution of system or units to a greater force.  
+Combat salvo provides two low-resolution models: homogeneous and heterogeneous salvo models based on the work published by CAPT Wayne P. Hughes. The homogeneous model aggregates two forces to assess attrition via differential equations representing the offensive and defensive capabilities of each side. The heterogeneous model accounts for multiple units in each force to provide understanding of the contribution of systems or units to a greater force.  
 
 
 # Project is a work in progress and not ready for use 
 
-## Areas for contribution
+## Areas for development
 
 ### Homogeneous Model
 
-* DOE input support
-
-+ Data output attributes
+* DOE input support (complete)
 
 + Data visualization of results 
 
@@ -21,16 +19,13 @@ Combat salvo provides two low-resolution models: homogeneous and heterogeneous s
 
 * Unit Test
 
-+ Dynamic targeting between iterations
++ Dynamic targeting between iterations (see branch "traget by list" targetAllocationSolver.py)
 
 + DOE input support
 
 + Map visualization (Flask, leaflet map viz possibly) 
 
 + Output visualization
-
-+ Defense matrix trouble shooting
-
 
 
 ## R Code to help understanding of the the Heterogeneous Salvo Model 
